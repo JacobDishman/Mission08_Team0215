@@ -25,7 +25,7 @@ using (var scope = app.Services.CreateScope())
 // Configure the HTTP request pipeline
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Home/Error");
+    app.UseExceptionHandler("/Task/Error");
     app.UseHsts();
 }
 
@@ -38,7 +38,7 @@ app.MapStaticAssets();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}")
+    pattern: "{controller=Task}/{action=Index}/{id?}")
     .WithStaticAssets();
 
 app.Run();
