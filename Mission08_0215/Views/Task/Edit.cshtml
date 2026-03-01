@@ -1,8 +1,76 @@
+@*
+    IS 413 - Mission 08 (Group Project #2)
+    Responsibility #2: Edit Task View and Shared Layout
+    Implemented Edit form with pre-filled values and Category dropdown.
+    Lucas Moraes
+*@
+
 @model Mission08_0215.Models.TaskItem
+@using Microsoft.AspNetCore.Mvc.Rendering
+
 @{
     ViewData["Title"] = "Edit Task";
+    var categories = ViewBag.Categories as IEnumerable<Mission08_0215.Models.Category> ?? Enumerable.Empty<Mission08_0215.Models.Category>();
 }
 
-<!-- Assignment 2: Edit Task View - to be built by the Views person -->
-<h2>Edit Task</h2>
-<p>This view will be completed by the person responsible for Assignment 2 (Views - Edit Task).</p>
+<div class="container">
+    <div class="row">
+        <div class="col-12 col-lg-8">
+            <h2 class="mb-3">Edit Task</h2>
+
+            <form asp-controller="Task" asp-action="Edit" method="post">
+                @Html.AntiForgeryToken()
+
+                <input type="hidden" asp-for="TaskItemId" />
+
+                <div class="mb-3">
+                    <label asp-for="TaskName" class="form-label"></label>
+                    <input asp-for="TaskName" class="form-control" />
+                    <span asp-validation-for="TaskName" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="DueDate" class="form-label"></label>
+                    <input asp-for="DueDate" class="form-control" type="date" />
+                    <span asp-validation-for="DueDate" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Quadrant" class="form-label"></label>
+                    <select asp-for="Quadrant" class="form-select">
+                        <option value="">Select...</option>
+                        <option value="1">Quadrant I (Important / Urgent)</option>
+                        <option value="2">Quadrant II (Important / Not Urgent)</option>
+                        <option value="3">Quadrant III (Not Important / Urgent)</option>
+                        <option value="4">Quadrant IV (Not Important / Not Urgent)</option>
+                    </select>
+                    <span asp-validation-for="Quadrant" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" for="CategoryId">Category</label>
+                    @* Category dropdown populated from ViewBag.Categories via repository pattern *@
+                    <select asp-for="CategoryId" class="form-select"
+                            asp-items="@(new SelectList(categories, nameof(Mission08_0215.Models.Category.CategoryId), nameof(Mission08_0215.Models.Category.CategoryName), Model.CategoryId))">
+                        <option value="">Select...</option>
+                    </select>
+                    <span asp-validation-for="CategoryId" class="text-danger"></span>
+                </div>
+
+                <div class="form-check mb-3">
+                    <input asp-for="Completed" class="form-check-input" />
+                    <label asp-for="Completed" class="form-check-label"></label>
+                </div>
+
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                    <a asp-controller="Task" asp-action="Quadrants" class="btn btn-outline-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
